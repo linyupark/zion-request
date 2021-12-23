@@ -1,0 +1,8 @@
+.editorconfig
+.eslintignore
+.eslintrc.js
+.npmignore
+.prettierignore
+.prettierrc.js
+tsconfig.json
+package-lock.json

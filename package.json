@@ -1,0 +1,53 @@
+{
+  "name": "@x011/request",
+  "version": "0.0.1",
+  "description": "Use SWR in the way of useRequest hook",
+  "keywords": [
+    "SWR",
+    "fetch",
+    "useRequest",
+    "React Hook"
+  ],
+  "main": "./dist/index.js",
+  "umd:main": "./dist/index.umd.js",
+  "module": "./dist/index.esm.js",
+  "jsnext:main": "./dist/index.esm.js",
+  "unpkg": "./dist/index.umd.js",
+  "source": "./src/index.ts",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.umd.js",
+      "import": "./dist/index.esm.js"
+    }
+  },
+  "scripts": {
+    "dev": "microbundle watch",
+    "build": "microbundle --compress -i src/index.ts -o dist/index.js && microbundle --compress",
+    "ts-build": "tsc ./src/**/*.ts -t es5 -m umd --outDir ./dist --rootDir ./src"
+  },
+  "author": "linyupark@gmail.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linyupark/zion-request"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^17.x || ^16.14.x",
+    "react-dom": "^17.x || ^16.14.x",
+    "swr": "^1.x"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "eslint": "^8.5.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "microbundle": "^0.14.2",
+    "prettier": "^2.5.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "swr": "^1.1.1",
+    "typescript": "^4.5.4"
+  }
+}
