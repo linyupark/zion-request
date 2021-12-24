@@ -36,7 +36,7 @@ interface UseRequestResp extends Omit<SWRResponse, 'mutate'> {
  * @returns UseRequestResp
  */
 const useRequest = (
-  fetcher: () => Promise<any>,
+  fetcher: (params?: null | any, key?: string) => Promise<any>,
   options?: UseRequestOptions,
 ): UseRequestResp => {
   const mergeOptions = {
@@ -60,8 +60,11 @@ const useRequest = (
   // Request parameter
   const [params, setParams] = useState(mergeOptions.params)
 
+  // Request parameter precedence
+  const swrFetcher = (key, params) => fetcher(params, key)
+
   // Main
-  const swrResp: SWRResponse = useSWR(key ? [key, params] : null, fetcher, {
+  const swrResp: SWRResponse = useSWR(key ? [key, params] : null, swrFetcher, {
     ...mergeOptions.swr,
     fallbackData: mergeOptions.initialData,
   })
