@@ -10,7 +10,7 @@ interface UseRequestOptions {
   key?: string
   manual?: boolean
   // Default request parameters
-  params: null | any
+  params?: null | any
   // Default data alias swr.fallbackData
   initialData?: any
   // SWR config
@@ -83,7 +83,8 @@ const useRequest = (
     swrResp.mutate({ ...swrResp.data, ...newData }, false)
 
   // Returns whether the loading state is triggered
-  const loading = swrResp.data === undefined && swrResp.isValidating
+  const loading =
+    swrResp.data === undefined && swrResp.isValidating && !swrResp.error
 
   return {
     loading,
