@@ -10,7 +10,7 @@ interface UseRequestOptions {
   key?: string
   manual?: boolean
   // Default request parameters
-  params?: null | any
+  params?: any | null
   // Default data alias swr.fallbackData
   initialData?: any
   // SWR config
@@ -64,15 +64,19 @@ const useRequest = (
   const swrFetcher = (key, params) => fetcher(params, key)
 
   // Main
-  const swrResp: SWRResponse = useSWR(key ? [key, params] : null, swrFetcher, {
-    ...mergeOptions.swr,
-    fallbackData: mergeOptions.initialData,
-  })
+  const swrResp: SWRResponse = useSWR(
+    key ? (params === null ? key : [key, params]) : null,
+    swrFetcher,
+    {
+      ...mergeOptions.swr,
+      fallbackData: mergeOptions.initialData,
+    },
+  )
 
   // Manual execution request
   const run = (newParams?: any) => {
-    setKey(fetcher.name + mergeOptions.key)
     setParams(newParams)
+    setKey(fetcher.name + mergeOptions.key)
   }
 
   // Refresh with the same request parameters (Will not trigger loading)
