@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import useSWR, { MutatorCallback, SWRConfiguration, SWRResponse } from 'swr'
 
 interface NewData {
@@ -19,7 +19,7 @@ interface UseRequestOptions {
 
 interface UseRequestResp extends Omit<SWRResponse, 'mutate'> {
   loading: boolean
-  run: (newParams?: any) => void
+  run: (newParams?: any, reload?: boolean) => void
   refresh: () => void
   params?: any
   mutate: (newData: NewData) => void
@@ -74,7 +74,16 @@ const useRequest = (
   )
 
   // Manual execution request
-  const run = (newParams?: any) => {
+  const run = (newParams?: any, reload?: boolean) => {
+    if (
+      key !== null &&
+      JSON.stringify(params) === JSON.stringify(newParams) &&
+      reload
+    ) {
+      // 发出请求刷新
+      refresh()
+      return
+    }
     setParams(newParams)
     setKey(fetcher.name + mergeOptions.key)
   }
@@ -87,8 +96,14 @@ const useRequest = (
     swrResp.mutate({ ...swrResp.data, ...newData }, false)
 
   // Returns whether the loading state is triggered
-  const loading =
-    swrResp.data === undefined && swrResp.isValidating && !swrResp.error
+  const loading = useMemo(() => {
+    if (key === null) {
+      return (
+        swrResp.data === undefined && swrResp.isValidating && !swrResp.error
+      )
+    }
+    return swrResp.isValidating
+  }, [key, swrResp])
 
   return {
     loading,
