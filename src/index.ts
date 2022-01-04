@@ -89,11 +89,29 @@ const useRequest = (
   }
 
   // Refresh with the same request parameters (Will not trigger loading)
-  const refresh = () => swrResp.mutate({ ...swrResp.data }, true)
+  const refresh = () => {
+    const type = Object.prototype.toString.call(swrResp.data)
+    let newData = swrResp.data
+
+    if (type.includes('Array')) {
+      newData = [...swrResp.data]
+    }
+    if (type.includes('Object')) {
+      newData = { ...swrResp.data }
+    }
+    return swrResp.mutate(newData, true)
+  }
 
   // Update the local data immediately, but disable the revalidation
-  const mutate = (newData: NewData) =>
-    swrResp.mutate({ ...swrResp.data, ...newData }, false)
+  const mutate = (newData: NewData) => {
+    const type = Object.prototype.toString.call(swrResp.data)
+    let mergeData = newData
+
+    if (type.includes('Object')) {
+      mergeData = { ...swrResp.data, ...newData }
+    }
+    return swrResp.mutate(mergeData, false)
+  }
 
   // Returns whether the loading state is triggered
   const loading = useMemo(() => {
